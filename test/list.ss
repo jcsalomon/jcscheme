@@ -18,3 +18,6 @@
  .
  (() . ())
 )
+
+( ( () ) )	; normal constructions of previous two lists
+( () () )

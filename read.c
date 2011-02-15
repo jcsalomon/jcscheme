@@ -4,6 +4,7 @@ static int get_next_nonspace(FILE *in);
 static inline int peek(FILE *in);
 
 static expr const* read_list(FILE *in);
+static expr const* read_list_cdr(FILE *in);
 
 
 expr const*
@@ -40,20 +41,32 @@ read_list(FILE *in)
 		fatal("incomplete list");
 	}
 
-	if ((c = get_next_nonspace(in)) != '.') {
-		fatal("real lists not yet implemented");
-	}
-
-	expr const * const cdr = read(in);
+	expr const * const cdr = read_list_cdr(in);
 	if (cdr == NULL) {
 		fatal("incomplete list");
 	}
 
-	if ((c = get_next_nonspace(in)) != ')') {
-		fatal("unclosed list");
-	}
-
 	return cons(car, cdr);
+}
+
+expr const*
+read_list_cdr(FILE *in)
+{
+	int c = get_next_nonspace(in);
+
+	if (c == '.') {
+		expr const * const cdr = read(in);
+
+		if ((c = get_next_nonspace(in)) != ')') {
+			fatal("unclosed list");
+		}
+		return cdr;
+	}
+	else {
+		ungetc(c, in);
+
+		return read_list(in);
+	}
 }
 
 int
