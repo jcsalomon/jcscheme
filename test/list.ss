@@ -1,23 +1,23 @@
 ; test lists
 
-()	; easy Nil
+'()	; easy Nil
 
-  ( 	; trickier,
+'  ( 	; trickier,
 )	; but still Nil
 
-(() . ())	; simple dotted pair; should yield “( () )”
+'(() . ())	; simple dotted pair; should yield “( () )”
 
-(	; explicit construction of list; should yield “( ( () ) )”
- (() . ())
- .
- ()
-)
+'(	; explicit construction of list; should yield “( ( () ) )”
+  (() . ())
+  .
+  ()
+ )
 
-(	; another explicit construction; should yield “( () () )”
- ()
- .
- (() . ())
-)
+'(	; another explicit construction; should yield “( () () )”
+  ()
+  .
+  (() . ())
+ )
 
-( ( () ) )	; normal constructions of previous two lists
-( () () )
+'( ( () ) )	; normal constructions of previous two lists
+'( () () )

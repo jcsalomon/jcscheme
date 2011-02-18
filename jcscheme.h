@@ -72,8 +72,7 @@ extern expr const* read(FILE *in);
 
 
 // Evaluate
-inline expr const* eval(expr const *exp) __attribute__((nonnull));
-inline expr const* eval(expr const *exp) {return exp;}
+extern expr const* eval(expr const *exp) __attribute__((nonnull));
 
 
 // Print
