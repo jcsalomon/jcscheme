@@ -32,5 +32,6 @@ main(int argc, char *argv[argc+1])
 			jcscheme(f);
 			fclose(f);
 		}
+	if (0) print(Symbol_Table); // enable for debugging
 	exit(EXIT_SUCCESS);
 }

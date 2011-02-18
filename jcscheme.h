@@ -55,7 +55,9 @@ inline expr const* cdr(expr const *pair) {return pair->cdr;}
 #define car(pair) (assert (is_pair(pair)), car(pair))
 #define cdr(pair) (assert (is_pair(pair)), cdr(pair))
 
-// symbols
+// symbols & symbol table
+extern expr * const Symbol_Table;
+
 extern expr const* make_symbol(char const *str) __attribute__((malloc));
 
 inline bool is_symbol(expr const *exp) __attribute__((nonnull));
