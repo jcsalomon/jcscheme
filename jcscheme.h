@@ -7,6 +7,7 @@
 
 #include <ctype.h>
 
+#include <assert.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +18,14 @@
 typedef struct cell {
 	enum {
 		T_NIL,
+		T_PAIR,
 	} tag;
+	union {
+		struct cons {
+			struct cell const *car;
+			struct cell const *cdr;
+		};
+	};
 } expr;
 
 // nil, the empty list
@@ -25,6 +33,25 @@ extern expr const * const Nil;
 
 inline bool is_nil(expr const *exp) __attribute__((nonnull));
 inline bool is_nil(expr const *exp) {return exp == Nil;}
+
+// lists
+extern expr const* cons(expr const *car, expr const *cdr)
+	__attribute__((malloc));
+
+inline bool is_pair(expr const *exp) __attribute__((nonnull));
+inline bool is_pair(expr const *exp) {return exp->tag == T_PAIR;}
+
+inline expr const* car(expr const *pair) __attribute__((nonnull));
+inline expr const* car(expr const *pair) {return pair->car;}
+
+inline expr const* cdr(expr const *pair) __attribute__((nonnull));
+inline expr const* cdr(expr const *pair) {return pair->cdr;}
+
+/* assertions are in macros rather than the inline functions
+ * for better diagnostics on constructions like “car(expression->member)”
+ */
+#define car(pair) (assert (is_pair(pair)), car(pair))
+#define cdr(pair) (assert (is_pair(pair)), cdr(pair))
 
 
 // Read

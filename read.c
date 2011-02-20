@@ -32,10 +32,28 @@ read_list(FILE *in)
 	if (c == ')') {
 		return Nil;
 	}
-	else {
-		fatal("non-empty list");
+
+	ungetc(c, in);
+
+	expr const * const car = read(in);
+	if (car == NULL) {
+		fatal("incomplete list");
 	}
-	unreached();
+
+	if ((c = get_next_nonspace(in)) != '.') {
+		fatal("real lists not yet implemented");
+	}
+
+	expr const * const cdr = read(in);
+	if (cdr == NULL) {
+		fatal("incomplete list");
+	}
+
+	if ((c = get_next_nonspace(in)) != ')') {
+		fatal("unclosed list");
+	}
+
+	return cons(car, cdr);
 }
 
 int
