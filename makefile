@@ -21,6 +21,7 @@ OBJS = jcscheme.o utility.o model.o read.o eval.o print.o
 
 TESTS = whitespace list symbol
 
+model.o: tree.h
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 

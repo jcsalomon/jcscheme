@@ -1,4 +1,5 @@
 #include "jcscheme.h"
+#include "tree.h"
 
 // Nil
 static const expr nil[] = {
@@ -38,11 +39,13 @@ make_symbol(char const *str)
 {
 	expr const *node = symbol_table;
 	for (;;) {
-		int cmp = strcmp(str, node->car->symb);
-		if (cmp == 0)
-			return node->car;
-
+		expr const * const symbol = node->car;
 		expr *branches = (expr *)node->cdr;
+
+		int cmp = strcmp(str, symbol->symb);
+		if (cmp == 0)
+			return symbol;
+
 		/* search left branch if cmp < 0, otherwise right branch
 		 * if branch is empty, create symbol, and the node to contain it,
 		 *   attach node to appropriate branch in tree, & return new symbol
@@ -85,9 +88,12 @@ make_new_symbol(char const *str)
 
 extern inline bool is_symbol(expr const *exp);
 
-static expr symbol_table[3] = {
-	[0] = {.tag = T_PAIR, {{.car = symbol_table+1, .cdr = symbol_table+2}}},
-	[1] = {.tag = T_SYMBOL, {.symb = "[]"}},
-	[2] = {.tag = T_PAIR, {{.car = nil, .cdr = nil}}}
-};
-expr * const Symbol_Table = symbol_table;
+// build symbol table bottom-up with root node last
+#define SYMBOL_TABLE(SYMB, ROOT) \
+	ROOT(Symbol_Table, symbol_table, Nil, Nil)
+
+// define all nodes
+SYMBOL_TABLE(DEFINE_SYMBOL, DEFINE_SYMTAB);
+
+// associate externally-visible names with the SYMBOL objects in the nodes
+SYMBOL_TABLE(NAME_SYMBOL, NAME_SYMTAB);
