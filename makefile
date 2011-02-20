@@ -17,9 +17,9 @@ LDFLAGS = $(LDDIRS) $(LDLIBS)
 JCSCHEME = jcscheme
 
 DEPS = jcscheme.h
-OBJS = jcscheme.o utility.o read.o eval.o print.o
+OBJS = jcscheme.o utility.o model.o read.o eval.o print.o
 
-TESTS = whitespace
+TESTS = whitespace list
 
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<

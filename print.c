@@ -3,6 +3,11 @@
 void
 print(expr const *exp)
 {
-	(void) exp;
-	fatal("no known types");
+	switch (exp->tag) {
+		case T_NIL:
+			printf("()");
+			break;
+		default:
+			fatal("unknown type %x", exp->tag);
+	}
 }

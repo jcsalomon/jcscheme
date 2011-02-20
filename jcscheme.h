@@ -3,6 +3,7 @@
 
 
 #include <stdarg.h>
+#include <stdbool.h>
 
 #include <ctype.h>
 
@@ -14,7 +15,16 @@
 
 // Model
 typedef struct cell {
+	enum {
+		T_NIL,
+	} tag;
 } expr;
+
+// nil, the empty list
+extern expr const * const Nil;
+
+inline bool is_nil(expr const *exp) __attribute__((nonnull));
+inline bool is_nil(expr const *exp) {return exp == Nil;}
 
 
 // Read

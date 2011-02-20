@@ -3,6 +3,8 @@
 static int get_next_nonspace(FILE *in);
 static inline int peek(FILE *in);
 
+static expr const* read_list(FILE *in);
+
 
 expr const*
 read(FILE *in)
@@ -12,8 +14,26 @@ read(FILE *in)
 	if (c == EOF) {
 		return NULL;
 	}
+	else if (c == '(') {
+		return read_list(in);
+	}
 	else {
 		fatal("unrecognized input");
+	}
+	unreached();
+}
+
+expr const*
+read_list(FILE *in)
+{
+	// initial ‘(’ already consumed
+	int c = get_next_nonspace(in);
+
+	if (c == ')') {
+		return Nil;
+	}
+	else {
+		fatal("non-empty list");
 	}
 	unreached();
 }
