@@ -26,3 +26,15 @@ cons(expr const *car, expr const *cdr)
 extern inline bool is_pair(expr const *exp);
 extern inline expr const* car(expr const *list);
 extern inline expr const* cdr(expr const *list);
+
+
+// Symbols
+expr const*
+make_symbol(char const *str)
+{
+	expr *symbol = emalloc(sizeof *symbol);
+	*symbol = (expr) {.tag = T_SYMBOL, {.symb = str}};
+	return symbol;
+}
+
+extern inline bool is_symbol(expr const *exp);

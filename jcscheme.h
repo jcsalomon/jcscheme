@@ -19,12 +19,14 @@ typedef struct cell {
 	enum {
 		T_NIL,
 		T_PAIR,
+		T_SYMBOL,
 	} tag;
 	union {
 		struct cons {
 			struct cell const *car;
 			struct cell const *cdr;
 		};
+		char const *symb;
 	};
 } expr;
 
@@ -52,6 +54,12 @@ inline expr const* cdr(expr const *pair) {return pair->cdr;}
  */
 #define car(pair) (assert (is_pair(pair)), car(pair))
 #define cdr(pair) (assert (is_pair(pair)), cdr(pair))
+
+// symbols
+extern expr const* make_symbol(char const *str) __attribute__((malloc));
+
+inline bool is_symbol(expr const *exp) __attribute__((nonnull));
+inline bool is_symbol(expr const *exp) {return exp->tag == T_SYMBOL;}
 
 
 // Read
@@ -94,6 +102,10 @@ extern void* emalloc(struct location loc, size_t size)
 	__attribute__((malloc));
 #define emalloc(size) \
 	emalloc((struct location){__func__, __FILE__, __LINE__}, size)
+
+extern void* erealloc(struct location loc, void *ptr, size_t size);
+#define erealloc(ptr, size)	  \
+	erealloc((struct location){__func__, __FILE__, __LINE__}, ptr, size)
 
 #define unreached() do { \
 		fatal("reached the unreachable"); \

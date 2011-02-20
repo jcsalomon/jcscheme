@@ -19,7 +19,7 @@ JCSCHEME = jcscheme
 DEPS = jcscheme.h
 OBJS = jcscheme.o utility.o model.o read.o eval.o print.o
 
-TESTS = whitespace list
+TESTS = whitespace list symbol
 
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<

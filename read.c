@@ -3,8 +3,11 @@
 static int get_next_nonspace(FILE *in);
 static inline int peek(FILE *in);
 
+inline static bool is_symbol_char(int c);
+
 static expr const* read_list(FILE *in);
 static expr const* read_list_cdr(FILE *in);
+static expr const* read_symbol(FILE *in);
 
 
 expr const*
@@ -17,6 +20,10 @@ read(FILE *in)
 	}
 	else if (c == '(') {
 		return read_list(in);
+	}
+	else if (is_symbol_char(c)) {
+		ungetc(c, in);
+		return read_symbol(in);
 	}
 	else {
 		fatal("unrecognized input");
@@ -69,6 +76,28 @@ read_list_cdr(FILE *in)
 	}
 }
 
+expr const*
+read_symbol(FILE *in)
+{
+	size_t i = 0, n = 64;
+	char *buf = emalloc(n);
+
+	int c;
+	while ((c = getc(in)), is_symbol_char(c))
+	{
+		buf[i++] = (char)c;
+
+		// if we’re at buffer’s end & there’s more to come, grow buffer
+		if (i == n-1 && is_symbol_char(peek(in)) )
+			buf = erealloc(buf, n *= 2);
+	}
+	assert (i < n); // sanity check
+	buf[i] = '\0';
+	
+	ungetc(c, in);
+	return make_symbol(buf);
+}
+
 int
 get_next_nonspace(FILE *in)
 {
@@ -93,4 +122,15 @@ peek (FILE *in)
 	int c = getc(in);
 	ungetc(c, in);
 	return c;
+}
+
+bool
+is_symbol_char(int c)
+{
+	return isalpha(c) || isdigit(c)
+		|| c == '+' || c == '-' || c == '*' || c == '/'
+		|| c == '<' || c == '>' || c == '='
+		|| c == '~' || c == '!' || c == '@' || c == '#'
+		|| c == '$' || c == '%' || c == '^' || c == '&'
+		|| c == '|' || c == '"' || c == '.' || c == '?';
 }

@@ -3,6 +3,7 @@
 #undef trace
 #undef fatal
 #undef emalloc
+#undef erealloc
 
 char const *argv0;
 
@@ -45,3 +46,17 @@ emalloc(struct location loc, size_t size)
 		fatal(loc, "malloc");
 	return p;
 }
+
+void*
+erealloc(struct location loc, void *ptr, size_t size)
+{
+	if (size == 0) {
+		free(ptr);
+		return NULL;
+	}
+	void *p = realloc(ptr, size);
+	if (p == NULL)
+		fatal(loc, "realloc");
+	return p;
+}
+

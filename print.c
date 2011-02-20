@@ -14,6 +14,9 @@ print(expr const *exp)
 			print_list(exp);
 			printf(")");
 			break;
+		case T_SYMBOL:
+			printf("%s", exp->symb);
+			break;
 		default:
 			fatal("unknown type %x", exp->tag);
 	}
