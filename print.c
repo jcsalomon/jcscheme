@@ -23,6 +23,17 @@ void
 print_list(expr const *list)
 {
 	print(list->car);
-	printf(" . ");
-	print(list->cdr);
+
+	switch (list->cdr->tag) {
+		case T_NIL:  // “(~ . ())” = “(~)”; print nothing
+			break;
+		case T_PAIR: // “(~ . (…))” = “(~ …)”; no parentheses around list->cdr
+			printf(" ");
+			print_list(list->cdr);
+			break;
+		default:
+			printf(" . ");
+			print(list->cdr);
+			break;
+	}
 }
