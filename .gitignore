@@ -1,0 +1,4 @@
+jcscheme
+*.o
+*.out
+*~
