@@ -25,6 +25,9 @@ read(FILE *in)
 		ungetc(c, in);
 		return read_symbol(in);
 	}
+	else if (c == '\'') {
+		return cons(Quote, cons(read(in), Nil));
+	}
 	else {
 		fatal("unrecognized input");
 	}

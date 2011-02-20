@@ -63,6 +63,9 @@ extern expr const* make_symbol(char const *str) __attribute__((malloc));
 inline bool is_symbol(expr const *exp) __attribute__((nonnull));
 inline bool is_symbol(expr const *exp) {return exp->tag == T_SYMBOL;}
 
+// built-in symbols
+extern expr const * const Quote;
+
 
 // Read
 extern expr const* read(FILE *in);

@@ -90,7 +90,8 @@ extern inline bool is_symbol(expr const *exp);
 
 // build symbol table bottom-up with root node last
 #define SYMBOL_TABLE(SYMB, ROOT) \
-	ROOT(Symbol_Table, symbol_table, Nil, Nil)
+	SYMB(Quote, quote, Nil, Nil); \
+	ROOT(Symbol_Table, symbol_table, Nil, quote)
 
 // define all nodes
 SYMBOL_TABLE(DEFINE_SYMBOL, DEFINE_SYMTAB);
